@@ -9,6 +9,8 @@ COPY package.json package-lock.json ./
 # Install dependencies
 RUN npm ci
 
+RUN npm update || yarn upgrade
+
 # Copy source code
 COPY . .
 

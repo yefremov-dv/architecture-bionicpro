@@ -40,3 +40,12 @@ services:
       REACT_APP_KEYCLOAK_URL: http://localhost:8080
       REACT_APP_KEYCLOAK_REALM: reports-realm
       REACT_APP_KEYCLOAK_CLIENT_ID: reports-frontend
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      KEYCLOAK_PUBLIC_KEY: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApQup5lU7M+RRgfpuMM/4VNAwxX/Cc/J/nbsePfir3kF5OZ+VbGbn4txaPSntc+rlqZzgQQqRylIdHveABfpd+k4/XtjWawheNoAtv7244ymf8uB6g3hT0bcxQNt8r7RsDuzwOuh56mjYuTA2+6ApAw5H6/3vkYHrM1b6ZeNy30wzfqpI3yiKl2RPCjbTw0u6sf6GHVibu58qRjFPBSswoCBR86UtnwRg3nOevwu4MO61BOv3j6Bs5G+ngXiwcwzgrDevI3pbwKXF1sw4sXmDtI4gNkJpyQvb+cHl1+7oYcLh4xgjFt+KRV8I00v8j9VQuHwPX0vfyC/9uv84JC8IVwIDAQAB"
+      SECRET_KEY: "oNwoLQdvJAvRcL89SydqCWCe5ry1jMgq"

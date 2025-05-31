@@ -2,19 +2,23 @@ from flask import Flask, request, jsonify
 import jwt
 import random
 import string
+import os
 
 # Публичный ключ Keycloak для проверки подписи токена
-KEYCLOAK_PUBLIC_KEY = """
------BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApQup5lU7M+RRgfpuMM/4VNAwxX/Cc/J/nbsePfir3kF5OZ+VbGbn4txaPSntc+rlqZzgQQqRylIdHveABfpd+k4/XtjWawheNoAtv7244ymf8uB6g3hT0bcxQNt8r7RsDuzwOuh56mjYuTA2+6ApAw5H6/3vkYHrM1b6ZeNy30wzfqpI3yiKl2RPCjbTw0u6sf6GHVibu58qRjFPBSswoCBR86UtnwRg3nOevwu4MO61BOv3j6Bs5G+ngXiwcwzgrDevI3pbwKXF1sw4sXmDtI4gNkJpyQvb+cHl1+7oYcLh4xgjFt+KRV8I00v8j9VQuHwPX0vfyC/9uv84JC8IVwIDAQAB
------END PUBLIC KEY-----
-"""
+KEYCLOAK_PUBLIC_KEY = os.getenv('KEYCLOAK_PUBLIC_KEY')
+SECRET_KEY = "oNwoLQdvJAvRcL89SydqCWCe5ry1jMgq"  # Добавляем секретный ключ
 
 app = Flask(__name__)
 
 @app.route('/reports', methods=['GET'])
 def generate_report():
     auth_header = request.headers.get('Authorization')
+    secret_key = request.args.get('secret')  # Берем секрет из GET-параметра
+
+    # Проверка секретного ключа
+    if secret_key != SECRET_KEY:
+        return jsonify({"message": "Unauthorized access: Invalid secret key."}), 401
+
     if not auth_header or not auth_header.startswith("Bearer"):
         return jsonify({"message": "Missing Authorization header"}), 401
 

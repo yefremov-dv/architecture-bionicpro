@@ -44,6 +44,9 @@ services:
       REACT_APP_KEYCLOAK_URL: http://localhost:8080
       REACT_APP_KEYCLOAK_REALM: reports-realm
       REACT_APP_KEYCLOAK_CLIENT_ID: reports-frontend
+    depends_on:
+      api:
+        condition: service_healthy
   api:
     build:
       context: ./api
@@ -57,3 +60,9 @@ services:
       - KEYCLOAK_CLIENT_SECRET=oNwoLQdvJAvRcL89SydqCWCe5ry1jMgq
     depends_on:
       - keycloak
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
